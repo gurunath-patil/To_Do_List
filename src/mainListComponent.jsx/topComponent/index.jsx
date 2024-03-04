@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment/moment";
 import "./style.css";
-import  TaskDisplayUI  from "../bottomComponent";
 
 export function IndexMainFunction() {
   let currentDate = new Date();
@@ -32,6 +31,14 @@ export function IndexMainFunction() {
     }
   }
 
+  function handleRemove(index) {
+    let response =confirm('are you remove this task')
+    if(response == true){
+      const updatetask = [...allTaskData];
+      updatetask.splice(index, 1);
+      setallTaskData(updatetask);
+    }
+  }
 
   const dayArr = [
     'Monday',
@@ -42,6 +49,33 @@ export function IndexMainFunction() {
     'Saturday',
     'Sunday',
   ];
+
+  let taskUI = allTaskData.map((data, index) => {
+    const { task, day, formateTime, date } = data;
+
+    return (
+      <>
+        <section className="container" key={index}>
+          <div className="row">
+            <ul className="ms-2 row justify-content-center">
+              <li className="col-md-2 overflow-auto">{task}</li>
+              <li className="col-md-1">{day}</li>
+              <li className="col-md-2">{date}</li>
+              <li className="col-md-1">{formateTime}</li>
+              <li className="col-md-2">
+                <button
+                  className="btn btn-outline-danger fw-bold"
+                  onClick={() => handleRemove(index)}
+                >
+                  Remove
+                </button>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </>
+    );
+  });
 
   return (
     <>
@@ -105,7 +139,7 @@ export function IndexMainFunction() {
           </div>
         </form>
       </div>
-      <TaskDisplayUI list={allTaskData}/>
+      {allTaskData && taskUI}
     </>
   );
 }
